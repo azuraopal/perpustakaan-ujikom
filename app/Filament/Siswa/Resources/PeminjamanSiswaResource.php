@@ -6,16 +6,17 @@ use App\Filament\Siswa\Resources\PeminjamanSiswaResource\Pages;
 use App\Models\Denda;
 use App\Models\Peminjaman;
 use App\Models\Pengaturan;
+use Filament\Actions\Action;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
-use Filament\Forms\Form;
 use Filament\Resources\Resource;
-use Filament\Tables\Actions\Action;
+use Filament\Schemas\Schema;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Facades\Auth;
 
 class PeminjamanSiswaResource extends Resource
 {
@@ -28,12 +29,12 @@ class PeminjamanSiswaResource extends Resource
 
     public static function getEloquentQuery(): Builder
     {
-        return parent::getEloquentQuery()->where('user_id', auth()->id());
+        return parent::getEloquentQuery()->where('user_id', Auth::id());
     }
 
-    public static function form(Form $form): Form
+    public static function form(Schema $schema): Schema
     {
-        return $form->schema([
+        return $schema->schema([
             Select::make('buku_id')
                 ->label('Pilih Buku')
                 ->relationship('buku', 'judul', fn ($query) => $query->where('stok', '>', 0))

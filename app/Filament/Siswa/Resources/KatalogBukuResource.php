@@ -56,4 +56,3 @@ class KatalogBukuResource extends Resource
         ];
     }
 }
-
