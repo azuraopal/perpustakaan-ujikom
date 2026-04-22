@@ -7,6 +7,7 @@ use App\Models\Pengaturan;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Schemas\Schema;
+use Filament\Schemas\Components\Section;
 use Filament\Resources\Resource;
 use Filament\Actions\EditAction;
 use Filament\Tables\Columns\TextColumn;
@@ -22,9 +23,28 @@ class PengaturanResource extends Resource
     public static function form(Schema $schema): Schema
     {
         return $schema->schema([
-            TextInput::make('kunci')->required()->maxLength(100),
-            TextInput::make('nilai')->required()->maxLength(255),
-            Textarea::make('deskripsi')->rows(3),
+            Section::make('Pengaturan Sistem')
+                ->description('Simpan nilai konfigurasi inti yang dipakai sistem perpustakaan.')
+                ->icon('heroicon-o-cog-6-tooth')
+                ->compact()
+                ->schema([
+                    TextInput::make('kunci')
+                        ->required()
+                        ->placeholder('Contoh: denda_per_hari')
+                        ->prefixIcon('heroicon-o-key')
+                        ->helperText('Gunakan format snake_case agar mudah dikelola.')
+                        ->maxLength(100),
+                    TextInput::make('nilai')
+                        ->required()
+                        ->placeholder('Contoh: 1000')
+                        ->prefixIcon('heroicon-o-adjustments-horizontal')
+                        ->maxLength(255),
+                    Textarea::make('deskripsi')
+                        ->rows(3)
+                        ->placeholder('Jelaskan fungsi pengaturan ini secara singkat...')
+                        ->columnSpanFull(),
+                ])
+                ->columns(2),
         ]);
     }
 

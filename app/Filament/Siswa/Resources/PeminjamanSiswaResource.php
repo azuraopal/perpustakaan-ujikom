@@ -6,13 +6,12 @@ use App\Filament\Siswa\Resources\PeminjamanSiswaResource\Pages;
 use App\Models\Denda;
 use App\Models\Peminjaman;
 use App\Models\Pengaturan;
-use Filament\Actions\Action;
-use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
-use Filament\Forms\Components\TextInput;
-use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
+use Filament\Schemas\Components\Section;
+use Filament\Resources\Resource;
+use Filament\Actions\Action;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
@@ -35,13 +34,27 @@ class PeminjamanSiswaResource extends Resource
     public static function form(Schema $schema): Schema
     {
         return $schema->schema([
-            Select::make('buku_id')
-                ->label('Pilih Buku')
-                ->relationship('buku', 'judul', fn ($query) => $query->where('stok', '>', 0))
-                ->searchable()
-                ->preload()
-                ->required(),
-            Textarea::make('catatan')->rows(3),
+            Section::make('Ajukan Peminjaman')
+                ->description('Pilih buku yang tersedia dan tambahkan catatan jika diperlukan.')
+                ->icon('heroicon-o-book-open')
+                ->compact()
+                ->schema([
+                    Select::make('buku_id')
+                        ->label('Pilih Buku')
+                        ->relationship('buku', 'judul', fn ($query) => $query->where('stok', '>', 0))
+                        ->native(false)
+                        ->placeholder('Cari buku yang tersedia')
+                        ->prefixIcon('heroicon-o-book-open')
+                        ->helperText('Hanya buku dengan stok lebih dari 0 yang ditampilkan.')
+                        ->searchable()
+                        ->preload()
+                        ->required(),
+                    Textarea::make('catatan')
+                        ->rows(3)
+                        ->placeholder('Opsional: tambahkan catatan untuk admin...')
+                        ->columnSpanFull(),
+                ])
+                ->columns(2),
         ]);
     }
 
@@ -107,4 +120,3 @@ class PeminjamanSiswaResource extends Resource
         ];
     }
 }
-

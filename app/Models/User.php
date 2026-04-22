@@ -4,13 +4,14 @@ namespace App\Models;
 
 use Database\Factories\UserFactory;
 use Filament\Models\Contracts\FilamentUser;
+use Filament\Models\Contracts\HasName;
 use Filament\Panel;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
-class User extends Authenticatable implements FilamentUser
+class User extends Authenticatable implements FilamentUser, HasName
 {
     /** @use HasFactory<UserFactory> */
     use HasFactory, Notifiable;
@@ -73,5 +74,10 @@ class User extends Authenticatable implements FilamentUser
     public function dendas(): HasMany
     {
         return $this->hasMany(Denda::class);
+    }
+
+    public function getFilamentName(): string
+    {
+        return $this->nama_lengkap ?? 'Unknown User';
     }
 }

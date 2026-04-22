@@ -8,6 +8,7 @@ use Filament\Resources\Resource;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Facades\Auth;
 
 class DendaSiswaResource extends Resource
 {
@@ -25,7 +26,7 @@ class DendaSiswaResource extends Resource
 
     public static function getEloquentQuery(): Builder
     {
-        return parent::getEloquentQuery()->where('user_id', auth()->id());
+        return parent::getEloquentQuery()->where('user_id', Auth::id());
     }
 
     public static function table(Table $table): Table
@@ -52,4 +53,3 @@ class DendaSiswaResource extends Resource
         ];
     }
 }
-

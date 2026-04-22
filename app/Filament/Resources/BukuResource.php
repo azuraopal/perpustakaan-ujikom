@@ -9,12 +9,12 @@ use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Schemas\Schema;
+use Filament\Schemas\Components\Section;
 use Filament\Resources\Resource;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteAction;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
-use Filament\Schemas\Components\Section;
 use Filament\Tables\Columns\ImageColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\SelectFilter;
@@ -35,37 +35,79 @@ class BukuResource extends Resource
     public static function form(Schema $schema): Schema
     {
         return $schema->schema([
-            Section::make('Informasi Buku')->schema([
-                TextInput::make('judul')->required()->maxLength(255),
-                TextInput::make('isbn')->maxLength(20),
-                TextInput::make('penulis')->required()->maxLength(150),
-                TextInput::make('penerbit')->required()->maxLength(150),
-                TextInput::make('tahun_terbit')->numeric()->required()->minValue(1900)->maxValue(date('Y')),
-                TextInput::make('stok')->numeric()->required()->default(0)->minValue(0),
-                Select::make('kategori_id')
-                    ->label('Kategori')
-                    ->relationship('kategori', 'nama')
-                    ->required()
-                    ->searchable()
-                    ->preload()
-                    ->createOptionForm([
-                        TextInput::make('nama')->required(),
-                    ]),
-                Select::make('rak_buku_id')
-                    ->label('Rak Buku')
-                    ->relationship('rakBuku', 'nama')
-                    ->searchable()
-                    ->preload(),
-            ])->columns(2),
+            Section::make('Informasi Buku')
+                ->description('Data inti buku untuk katalog perpustakaan.')
+                ->icon('heroicon-o-book-open')
+                ->columnSpanFull()
+                ->schema([
+                    TextInput::make('judul')
+                        ->required()
+                        ->placeholder('Masukkan judul buku')
+                        ->maxLength(255),
+                    TextInput::make('isbn')
+                        ->label('ISBN')
+                        ->placeholder('978-602-...')
+                        ->helperText('Kosongkan jika tidak ada.')
+                        ->maxLength(20),
+                    TextInput::make('penulis')
+                        ->required()
+                        ->placeholder('Nama penulis')
+                        ->maxLength(150),
+                    TextInput::make('penerbit')
+                        ->required()
+                        ->placeholder('Nama penerbit')
+                        ->maxLength(150),
+                    TextInput::make('tahun_terbit')
+                        ->numeric()
+                        ->required()
+                        ->placeholder((string) date('Y'))
+                        ->minValue(1900)
+                        ->maxValue((int) date('Y')),
+                    TextInput::make('stok')
+                        ->numeric()
+                        ->required()
+                        ->default(0)
+                        ->minValue(0),
+                    Select::make('kategori_id')
+                        ->label('Kategori')
+                        ->relationship('kategori', 'nama')
+                        ->required()
+                        ->native(false)
+                        ->placeholder('Pilih kategori')
+                        ->searchable()
+                        ->preload()
+                        ->createOptionForm([
+                            TextInput::make('nama')->required(),
+                        ]),
+                    Select::make('rak_buku_id')
+                        ->label('Rak Buku')
+                        ->relationship('rakBuku', 'nama')
+                        ->native(false)
+                        ->placeholder('Pilih rak buku')
+                        ->searchable()
+                        ->preload(),
+                ])
+                ->columns(2),
 
-            Section::make('Detail Tambahan')->schema([
-                Textarea::make('sinopsis')->rows(4),
-                FileUpload::make('cover_image')
-                    ->label('Cover Buku')
-                    ->image()
-                    ->directory('cover-buku')
-                    ->maxSize(2048),
-            ]),
+            Section::make('Detail Tambahan')
+                ->description('Cover dan sinopsis buku.')
+                ->icon('heroicon-o-photo')
+                ->columnSpanFull()
+                ->schema([
+                    FileUpload::make('cover_image')
+                        ->label('Cover Buku')
+                        ->image()
+                        ->imageEditor()
+                        ->imagePreviewHeight('180')
+                        ->panelLayout('compact')
+                        ->directory('cover-buku')
+                        ->helperText('Rasio potret, maks 2MB.')
+                        ->maxSize(2048),
+                    Textarea::make('sinopsis')
+                        ->rows(5)
+                        ->placeholder('Ringkasan isi buku...'),
+                ])
+                ->columns(2),
         ]);
     }
 
@@ -100,4 +142,3 @@ class BukuResource extends Resource
         ];
     }
 }
-

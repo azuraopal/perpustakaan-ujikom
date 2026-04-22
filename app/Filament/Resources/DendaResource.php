@@ -8,6 +8,7 @@ use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Schemas\Schema;
+use Filament\Schemas\Components\Section;
 use Filament\Resources\Resource;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteAction;
@@ -32,23 +33,66 @@ class DendaResource extends Resource
     public static function form(Schema $schema): Schema
     {
         return $schema->schema([
-            Select::make('peminjaman_id')
-                ->label('Peminjaman')
-                ->relationship('peminjaman', 'kode_peminjaman')
-                ->searchable()->preload()->required(),
-            Select::make('user_id')
-                ->label('Siswa')
-                ->relationship('user', 'nama_lengkap', fn ($query) => $query->where('role', 'siswa'))
-                ->searchable()->preload()->required(),
-            Select::make('jenis_denda')
-                ->options(['keterlambatan' => 'Keterlambatan', 'kerusakan' => 'Kerusakan', 'kehilangan' => 'Kehilangan'])
-                ->required(),
-            TextInput::make('jumlah_hari')->numeric()->label('Jumlah Hari Terlambat'),
-            TextInput::make('nominal')->numeric()->required()->prefix('Rp'),
-            Select::make('status_bayar')
-                ->options(['belum_bayar' => 'Belum Bayar', 'sudah_bayar' => 'Sudah Bayar'])
-                ->default('belum_bayar')->required(),
-            DatePicker::make('tanggal_bayar'),
+            Section::make('Informasi Denda')
+                ->description('Data pelanggaran dan nilai denda.')
+                ->icon('heroicon-o-banknotes')
+                ->columnSpanFull()
+                ->schema([
+                    Select::make('peminjaman_id')
+                        ->label('Peminjaman')
+                        ->relationship('peminjaman', 'kode_peminjaman')
+                        ->native(false)
+                        ->placeholder('Pilih kode peminjaman')
+                        ->searchable()
+                        ->preload()
+                        ->required(),
+                    Select::make('user_id')
+                        ->label('Siswa')
+                        ->relationship('user', 'nama_lengkap', fn ($query) => $query->where('role', 'siswa'))
+                        ->native(false)
+                        ->placeholder('Pilih siswa')
+                        ->searchable()
+                        ->preload()
+                        ->required(),
+                    Select::make('jenis_denda')
+                        ->options([
+                            'keterlambatan' => 'Keterlambatan',
+                            'kerusakan' => 'Kerusakan',
+                            'kehilangan' => 'Kehilangan',
+                        ])
+                        ->native(false)
+                        ->required(),
+                    TextInput::make('jumlah_hari')
+                        ->numeric()
+                        ->label('Jumlah Hari Terlambat')
+                        ->placeholder('Contoh: 3'),
+                    TextInput::make('nominal')
+                        ->numeric()
+                        ->required()
+                        ->prefix('Rp')
+                        ->placeholder('0')
+                        ->minValue(0),
+                    Select::make('status_bayar')
+                        ->options([
+                            'belum_bayar' => 'Belum Bayar',
+                            'sudah_bayar' => 'Sudah Bayar',
+                        ])
+                        ->native(false)
+                        ->default('belum_bayar')
+                        ->required(),
+                ])
+                ->columns(2),
+
+            Section::make('Pembayaran')
+                ->description('Tanggal pelunasan denda.')
+                ->icon('heroicon-o-receipt-percent')
+                ->columnSpanFull()
+                ->schema([
+                    DatePicker::make('tanggal_bayar')
+                        ->label('Tanggal Bayar')
+                        ->helperText('Isi saat denda sudah dilunasi.'),
+                ])
+                ->columns(2),
         ]);
     }
 
@@ -83,4 +127,3 @@ class DendaResource extends Resource
         ];
     }
 }
-

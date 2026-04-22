@@ -34,55 +34,78 @@ class PeminjamanResource extends Resource
     public static function form(Schema $schema): Schema
     {
         return $schema->schema([
-            Section::make('Data Peminjaman')->schema([
-                TextInput::make('kode_peminjaman')
-                    ->default(fn () => Peminjaman::generateKode())
-                    ->disabled()
-                    ->dehydrated()
-                    ->required(),
-                Select::make('user_id')
-                    ->label('Peminjam')
-                    ->relationship('user', 'nama_lengkap', fn ($query) => $query->where('role', 'siswa'))
-                    ->searchable()
-                    ->preload()
-                    ->required(),
-                Select::make('buku_id')
-                    ->label('Buku')
-                    ->relationship('buku', 'judul', fn ($query) => $query->where('stok', '>', 0))
-                    ->searchable()
-                    ->preload()
-                    ->required(),
-                DatePicker::make('tanggal_pinjam')
-                    ->required()
-                    ->default(now()),
-                DatePicker::make('tanggal_harus_kembali')
-                    ->required()
-                    ->default(now()->addDays(7)),
-                TextInput::make('jumlah')
-                    ->numeric()
-                    ->default(1)
-                    ->minValue(1)
-                    ->required(),
-                Select::make('status')
-                    ->options([
-                        'dipinjam' => 'Dipinjam',
-                        'dikembalikan' => 'Dikembalikan',
-                        'terlambat' => 'Terlambat',
-                    ])
-                    ->default('dipinjam')
-                    ->required(),
-                DatePicker::make('tanggal_dikembalikan')
-                    ->label('Tanggal Dikembalikan'),
-                Select::make('kondisi_buku')
-                    ->options([
-                        'baik' => 'Baik',
-                        'rusak_ringan' => 'Rusak Ringan',
-                        'rusak_berat' => 'Rusak Berat',
-                        'hilang' => 'Hilang',
-                    ])
-                    ->default('baik'),
-                Textarea::make('catatan')->rows(3),
-            ])->columns(2),
+            Section::make('Data Peminjaman')
+                ->description('Informasi transaksi peminjaman buku.')
+                ->icon('heroicon-o-arrow-right-circle')
+                ->columnSpanFull()
+                ->schema([
+                    TextInput::make('kode_peminjaman')
+                        ->default(fn () => Peminjaman::generateKode())
+                        ->disabled()
+                        ->dehydrated()
+                        ->helperText('Kode otomatis oleh sistem.')
+                        ->required(),
+                    Select::make('user_id')
+                        ->label('Peminjam')
+                        ->relationship('user', 'nama_lengkap', fn ($query) => $query->where('role', 'siswa'))
+                        ->native(false)
+                        ->placeholder('Pilih siswa peminjam')
+                        ->searchable()
+                        ->preload()
+                        ->required(),
+                    Select::make('buku_id')
+                        ->label('Buku')
+                        ->relationship('buku', 'judul', fn ($query) => $query->where('stok', '>', 0))
+                        ->native(false)
+                        ->placeholder('Pilih buku tersedia')
+                        ->searchable()
+                        ->preload()
+                        ->required(),
+                    TextInput::make('jumlah')
+                        ->numeric()
+                        ->default(1)
+                        ->minValue(1)
+                        ->required(),
+                    DatePicker::make('tanggal_pinjam')
+                        ->required()
+                        ->default(now()),
+                    DatePicker::make('tanggal_harus_kembali')
+                        ->required()
+                        ->default(now()->addDays(7)),
+                    Select::make('status')
+                        ->options([
+                            'dipinjam' => 'Dipinjam',
+                            'dikembalikan' => 'Dikembalikan',
+                            'terlambat' => 'Terlambat',
+                        ])
+                        ->native(false)
+                        ->default('dipinjam')
+                        ->required(),
+                ])
+                ->columns(2),
+
+            Section::make('Pengembalian')
+                ->description('Isi saat buku telah dikembalikan.')
+                ->icon('heroicon-o-arrow-uturn-left')
+                ->columnSpanFull()
+                ->schema([
+                    DatePicker::make('tanggal_dikembalikan')
+                        ->label('Tanggal Dikembalikan'),
+                    Select::make('kondisi_buku')
+                        ->options([
+                            'baik' => 'Baik',
+                            'rusak_ringan' => 'Rusak Ringan',
+                            'rusak_berat' => 'Rusak Berat',
+                            'hilang' => 'Hilang',
+                        ])
+                        ->native(false)
+                        ->default('baik'),
+                    Textarea::make('catatan')
+                        ->rows(3)
+                        ->placeholder('Catatan tambahan...')
+                        ->columnSpanFull(),
+                ])
+                ->columns(2),
         ]);
     }
 

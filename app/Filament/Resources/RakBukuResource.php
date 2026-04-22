@@ -6,6 +6,7 @@ use App\Filament\Resources\RakBukuResource\Pages;
 use App\Models\RakBuku;
 use Filament\Forms\Components\TextInput;
 use Filament\Schemas\Schema;
+use Filament\Schemas\Components\Section;
 use Filament\Resources\Resource;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteAction;
@@ -29,10 +30,31 @@ class RakBukuResource extends Resource
     public static function form(Schema $schema): Schema
     {
         return $schema->schema([
-            TextInput::make('kode_rak')->required()->maxLength(20),
-            TextInput::make('nama')->required()->maxLength(100),
-            TextInput::make('lokasi')->maxLength(100),
-            TextInput::make('kapasitas')->numeric(),
+            Section::make('Identitas Rak')
+                ->description('Atur informasi rak agar pengelolaan lokasi buku lebih terstruktur.')
+                ->icon('heroicon-o-archive-box')
+                ->compact()
+                ->schema([
+                    TextInput::make('kode_rak')
+                        ->required()
+                        ->placeholder('Contoh: R-01')
+                        ->prefixIcon('heroicon-o-hashtag')
+                        ->maxLength(20),
+                    TextInput::make('nama')
+                        ->required()
+                        ->placeholder('Nama rak')
+                        ->prefixIcon('heroicon-o-archive-box')
+                        ->maxLength(100),
+                    TextInput::make('lokasi')
+                        ->placeholder('Contoh: Lantai 2 - Zona Timur')
+                        ->prefixIcon('heroicon-o-map-pin')
+                        ->maxLength(100),
+                    TextInput::make('kapasitas')
+                        ->numeric()
+                        ->placeholder('Contoh: 120')
+                        ->prefixIcon('heroicon-o-squares-plus'),
+                ])
+                ->columns(2),
         ]);
     }
 

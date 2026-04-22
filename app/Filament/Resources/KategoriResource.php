@@ -7,6 +7,7 @@ use App\Models\Kategori;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Schemas\Schema;
+use Filament\Schemas\Components\Section;
 use Filament\Resources\Resource;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteAction;
@@ -30,8 +31,22 @@ class KategoriResource extends Resource
     public static function form(Schema $schema): Schema
     {
         return $schema->schema([
-            TextInput::make('nama')->required()->maxLength(100),
-            Textarea::make('deskripsi')->rows(3),
+            Section::make('Informasi Kategori')
+                ->description('Kelompokkan buku berdasarkan jenis untuk memudahkan pencarian.')
+                ->icon('heroicon-o-tag')
+                ->compact()
+                ->schema([
+                    TextInput::make('nama')
+                        ->required()
+                        ->placeholder('Contoh: Novel')
+                        ->prefixIcon('heroicon-o-tag')
+                        ->maxLength(100),
+                    Textarea::make('deskripsi')
+                        ->rows(3)
+                        ->placeholder('Deskripsi singkat kategori')
+                        ->columnSpanFull(),
+                ])
+                ->columns(2),
         ]);
     }
 

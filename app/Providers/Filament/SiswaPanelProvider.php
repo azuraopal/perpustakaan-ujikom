@@ -25,10 +25,17 @@ class SiswaPanelProvider extends PanelProvider
         return $panel
             ->id('siswa')
             ->path('siswa')
-            ->login()
-            ->registration()
+            ->brandName('Portal Siswa')
+            ->font('Inter')
+            ->viteTheme('resources/css/filament/siswa/theme.css')
+            ->sidebarCollapsibleOnDesktop()
+            ->maxContentWidth('full')
             ->colors([
-                'primary' => Color::Blue,
+                'primary' => Color::Gray,
+                'danger' => Color::Rose,
+                'info' => Color::Sky,
+                'success' => Color::Emerald,
+                'warning' => Color::Amber,
             ])
             ->discoverResources(in: app_path('Filament/Siswa/Resources'), for: 'App\Filament\Siswa\Resources')
             ->discoverPages(in: app_path('Filament/Siswa/Pages'), for: 'App\Filament\Siswa\Pages')
