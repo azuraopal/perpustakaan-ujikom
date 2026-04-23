@@ -4,6 +4,7 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\DendaResource\Pages;
 use App\Models\Denda;
+use App\Models\LogAktivitas;
 use Filament\Actions\Action;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\Select;
@@ -181,7 +182,7 @@ class DendaResource extends Resource
                             ->success()
                             ->sendToDatabase($record->user);
 
-                        \App\Models\LogAktivitas::create([
+                        LogAktivitas::create([
                             'user_id' => auth()->id(),
                             'aktivitas' => 'Konfirmasi Pembayaran Cash',
                             'detail' => "Mengkonfirmasi pembayaran tunai denda Rp " . number_format($record->nominal, 0, ',', '.') . " untuk {$record->user->nama_lengkap}.",

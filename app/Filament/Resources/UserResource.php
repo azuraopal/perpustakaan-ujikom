@@ -89,7 +89,7 @@ class UserResource extends Resource
             Section::make('Data Pribadi')
                 ->description('Informasi profil dan foto anggota.')
                 ->icon('heroicon-o-user-circle')
-                ->aside()
+                ->columnSpanFull()
                 ->schema([
                     TextInput::make('kelas')
                         ->placeholder('Contoh: XII RPL 1')
@@ -115,7 +115,8 @@ class UserResource extends Resource
                         ->rows(4)
                         ->placeholder('Alamat lengkap anggota')
                         ->columnSpanFull(),
-                ]),
+                ])
+                ->columns(1),
         ]);
     }
 
@@ -124,14 +125,15 @@ class UserResource extends Resource
         return $table
             ->columns([
                 ImageColumn::make('foto')->circular()->disk('public')
-                    ->checkFileExistence(false)
                     ->visibility('public')
+                    ->defaultImageUrl('https://ui-avatars.com/api/?name=User&background=111&color=fff')
                     ->toggleable(),
                 TextColumn::make('nomor_induk')->label('NIS/NIP')->searchable()->sortable(),
                 TextColumn::make('nama_lengkap')->searchable()->sortable(),
                 TextColumn::make('email')->searchable(),
                 TextColumn::make('role')
                     ->badge()
+                    ->formatStateUsing(fn (string $state): string => ucfirst($state))
                     ->color(fn (string $state): string => match ($state) {
                         'admin' => 'danger',
                         'siswa' => 'info',

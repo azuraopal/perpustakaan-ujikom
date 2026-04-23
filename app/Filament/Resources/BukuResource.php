@@ -132,7 +132,6 @@ class BukuResource extends Resource
         return $table
             ->columns([
                 ImageColumn::make('cover_image')->label('Cover')->disk('public')->square()->size(50)
-                    ->checkFileExistence(false)
                     ->visibility('public')
                     ->defaultImageUrl(url('/images/placeholder-book.png')),
                 TextColumn::make('judul')->searchable()->sortable()->limit(40),
