@@ -62,13 +62,12 @@
 
                             @if($buku->stok > 0)
                                 <button
-                                    wire:click="pinjamBuku({{ $buku->id }})"
-                                    wire:confirm="Apakah Anda yakin ingin meminjam buku '{{ $buku->judul }}'?"
-                                    style="padding:0.4rem 1rem; background:#111; color:#fff; border:none; border-radius:0.5rem; font-size:0.78rem; font-weight:600; cursor:pointer; font-family:inherit; transition:all 0.2s;"
+                                    wire:click="bukaFormPinjam({{ $buku->id }})"
+                                    style="padding:0.42rem 1rem; background:#111; color:#fff; border:none; border-radius:0.5rem; font-size:0.78rem; font-weight:700; letter-spacing:0.01em; cursor:pointer; font-family:inherit; transition:all 0.2s;"
                                     onmouseover="this.style.background='#333'; this.style.transform='scale(1.03)'"
                                     onmouseout="this.style.background='#111'; this.style.transform='scale(1)'"
                                 >
-                                    Pinjam
+                                    Ajukan
                                 </button>
                             @endif
                         </div>
