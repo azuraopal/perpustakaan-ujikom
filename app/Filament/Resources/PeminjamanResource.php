@@ -282,15 +282,19 @@ class PeminjamanResource extends Resource
                             $hariTerlambat = (int) $record->tanggal_harus_kembali->diffInDays($record->tanggal_dikembalikan);
                         }
 
+                        $totalDendaBaru = 0;
+
                         if ($hariTerlambat > 0) {
                             $dendaPerHari = (int) Pengaturan::getValue('denda_per_hari', '1000');
+                            $nominalLate = $hariTerlambat * $dendaPerHari * $record->jumlah;
+                            $totalDendaBaru += $nominalLate;
 
                             Denda::create([
                                 'peminjaman_id' => $record->id,
                                 'user_id' => $record->user_id,
                                 'jenis_denda' => 'keterlambatan',
                                 'jumlah_hari' => $hariTerlambat,
-                                'nominal' => $hariTerlambat * $dendaPerHari,
+                                'nominal' => $nominalLate,
                                 'status_bayar' => 'belum_bayar',
                             ]);
                         }
@@ -303,12 +307,14 @@ class PeminjamanResource extends Resource
                         };
 
                         if ($dendaKondisi > 0) {
+                            $nominalKondisi = $dendaKondisi * $record->jumlah;
+                            $totalDendaBaru += $nominalKondisi;
                             Denda::create([
                                 'peminjaman_id' => $record->id,
                                 'user_id' => $record->user_id,
                                 'jenis_denda' => $record->kondisi_buku === 'hilang' ? 'kehilangan' : 'kerusakan',
                                 'jumlah_hari' => null,
-                                'nominal' => $dendaKondisi,
+                                'nominal' => $nominalKondisi,
                                 'status_bayar' => 'belum_bayar',
                             ]);
                         }
@@ -324,6 +330,14 @@ class PeminjamanResource extends Resource
                             ->body("Buku '{$record->buku->judul}' berhasil dikembalikan dan diverifikasi. Terima kasih!")
                             ->success()
                             ->sendToDatabase($record->user);
+
+                        if ($totalDendaBaru > 0) {
+                            Notification::make()
+                                ->title('Pemberitahuan Denda')
+                                ->body("Terdapat denda sebesar Rp " . number_format($totalDendaBaru, 0, ',', '.') . " pada peminjaman '{$record->buku->judul}'. Silakan cek menu Denda Anda untuk rincian dan pembayaran.")
+                                ->danger()
+                                ->sendToDatabase($record->user);
+                        }
 
                         \App\Models\LogAktivitas::create([
                             'user_id' => Auth::id(),
