@@ -19,6 +19,21 @@ class DendaSiswaResource extends Resource
     protected static ?int $navigationSort = 3;
     protected static ?string $slug = 'denda-saya';
 
+    public static function getNavigationBadge(): ?string
+    {
+        $userId = Auth::id();
+        if (! $userId) {
+            return null;
+        }
+        $count = Denda::where('user_id', $userId)->where('status_bayar', Denda::STATUS_BELUM_BAYAR)->count();
+        return $count > 0 ? (string) $count : null;
+    }
+
+    public static function getNavigationBadgeColor(): string|array|null
+    {
+        return 'danger';
+    }
+
     public static function canCreate(): bool
     {
         return false;
@@ -34,12 +49,21 @@ class DendaSiswaResource extends Resource
         return $table
             ->columns([
                 TextColumn::make('peminjaman.kode_peminjaman')->label('Kode Pinjam'),
-                TextColumn::make('jenis_denda')->badge(),
+                TextColumn::make('jenis_denda')
+                    ->badge()
+                    ->formatStateUsing(fn (string $state) => Denda::jenisDendaLabel($state))
+                    ->color('gray'),
                 TextColumn::make('jumlah_hari')->label('Hari Terlambat'),
                 TextColumn::make('nominal')->money('IDR'),
                 TextColumn::make('status_bayar')
                     ->badge()
-                    ->color(fn (string $state) => $state === 'sudah_bayar' ? 'success' : 'danger'),
+                    ->formatStateUsing(fn (string $state) => Denda::statusBayarLabel($state))
+                    ->color(fn (string $state) => Denda::statusBayarColor($state)),
+                TextColumn::make('metode_pembayaran')
+                    ->label('Metode')
+                    ->formatStateUsing(fn (?string $state) => Denda::metodePembayaranLabel($state))
+                    ->badge()
+                    ->color('gray'),
                 TextColumn::make('tanggal_bayar')->date('d/m/Y'),
             ])
             ->actions([])
