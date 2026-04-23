@@ -19,6 +19,8 @@ class RakBukuResource extends Resource
     protected static ?string $model = RakBuku::class;
     protected static string | \BackedEnum | null $navigationIcon = 'heroicon-o-archive-box';
     protected static ?string $navigationLabel = 'Rak Buku';
+    protected static ?string $modelLabel = 'Rak Buku';
+    protected static ?string $pluralModelLabel = 'Rak Buku';
     protected static ?int $navigationSort = 3;
 
     public static function getNavigationGroup(): string|null

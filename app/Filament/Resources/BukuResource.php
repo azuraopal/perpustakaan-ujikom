@@ -25,6 +25,8 @@ class BukuResource extends Resource
     protected static ?string $model = Buku::class;
     protected static string | \BackedEnum | null $navigationIcon = 'heroicon-o-book-open';
     protected static ?string $navigationLabel = 'Data Buku';
+    protected static ?string $modelLabel = 'Buku';
+    protected static ?string $pluralModelLabel = 'Buku';
     protected static ?int $navigationSort = 4;
 
     public static function getNavigationGroup(): string|null

@@ -2,9 +2,8 @@
 
 namespace App\Filament\Siswa\Pages;
 
+use App\Filament\Siswa\Resources\PeminjamanSiswaResource;
 use App\Models\Buku;
-use App\Models\Peminjaman;
-use App\Models\Pengaturan;
 use Filament\Notifications\Notification;
 use Filament\Pages\Page;
 use Illuminate\Support\Collection;
@@ -43,7 +42,7 @@ class KatalogBuku extends Page
         return \App\Models\Kategori::orderBy('nama')->get();
     }
 
-    public function pinjamBuku(int $bukuId): void
+    public function bukaFormPinjam(int $bukuId): void
     {
         $buku = Buku::findOrFail($bukuId);
 
@@ -56,38 +55,6 @@ class KatalogBuku extends Page
             return;
         }
 
-        $maxPinjam = (int) Pengaturan::getValue('max_peminjaman', '3');
-        $currentPinjam = Peminjaman::where('user_id', auth()->id())
-            ->where('status', 'dipinjam')
-            ->count();
-
-        if ($currentPinjam >= $maxPinjam) {
-            Notification::make()
-                ->title('Batas Peminjaman Tercapai')
-                ->body("Anda sudah meminjam {$currentPinjam} buku. Maksimal {$maxPinjam} buku.")
-                ->danger()
-                ->send();
-            return;
-        }
-
-        $durasi = (int) Pengaturan::getValue('durasi_pinjam', '7');
-
-        Peminjaman::create([
-            'kode_peminjaman' => Peminjaman::generateKode(),
-            'user_id' => auth()->id(),
-            'buku_id' => $buku->id,
-            'tanggal_pinjam' => now()->toDateString(),
-            'tanggal_harus_kembali' => now()->addDays($durasi)->toDateString(),
-            'jumlah' => 1,
-            'status' => 'dipinjam',
-        ]);
-
-        $buku->decrement('stok');
-
-        Notification::make()
-            ->title('Peminjaman Berhasil!')
-            ->body("Buku \"{$buku->judul}\" berhasil dipinjam. Kembalikan sebelum " . now()->addDays($durasi)->format('d/m/Y'))
-            ->success()
-            ->send();
+        $this->redirect(PeminjamanSiswaResource::getUrl('create', ['buku' => $buku->id], panel: 'siswa'));
     }
 }
