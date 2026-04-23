@@ -181,21 +181,35 @@
 }
 
 /* ─── WIDGETS / STATS ─── */
+.fi-wi-stats-overview {
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    padding: 0 !important;
+}
+
 .fi-wi-stats-overview-stat {
     border-radius: 1rem;
     border: 1px solid rgba(0, 0, 0, 0.07);
-    background: rgba(255, 255, 255, 0.9);
-    transition: all 200ms ease;
+    background: rgba(255, 255, 255, 0.95);
+    transition: all 250ms cubic-bezier(0.4, 0, 0.2, 1);
+    padding: 1.25rem;
 }
 
 .fi-wi-stats-overview-stat:hover {
-    box-shadow: 0 8px 24px -6px rgba(0, 0, 0, 0.08);
-    transform: translateY(-2px);
+    box-shadow: 0 12px 32px -8px rgba(0, 0, 0, 0.1);
+    transform: translateY(-3px);
+    border-color: rgba(0, 0, 0, 0.12);
 }
 
 .dark .fi-wi-stats-overview-stat {
     border-color: rgba(255, 255, 255, 0.08);
-    background: rgba(18, 18, 18, 0.85);
+    background: rgba(18, 18, 18, 0.9);
+}
+
+.dark .fi-wi-stats-overview-stat:hover {
+    border-color: rgba(255, 255, 255, 0.15);
+    box-shadow: 0 12px 32px -8px rgba(0, 0, 0, 0.4);
 }
 
 /* ─── MODAL ─── */
@@ -217,4 +231,74 @@
 /* ─── FORM GRID SPACING ─── */
 .fi-fo-component-ctn {
     gap: 1.25rem;
+}
+
+/* ─── PERFORMANCE + MOTION OVERRIDES ─── */
+.fi-topbar,
+.fi-sidebar {
+    backdrop-filter: blur(8px) saturate(1.02);
+}
+
+.fi-ta-ctn,
+.fi-section {
+    backdrop-filter: none;
+}
+
+.fi-main-sidebar,
+.fi-main-ctn,
+.fi-topbar,
+.fi-sidebar-close-overlay {
+    transition: all 220ms ease;
+}
+
+.fi-main-sidebar.fi-sidebar-open {
+    animation: fi-sidebar-slide-in 220ms ease-out;
+}
+
+.fi-page {
+    animation: fi-page-fade-in 220ms ease-out;
+}
+
+.fi-main-sidebar .fi-sidebar-item-btn {
+    transition: transform 160ms ease, background-color 160ms ease, color 160ms ease;
+}
+
+.fi-main-sidebar .fi-sidebar-item-btn:hover {
+    transform: translateX(3px);
+}
+
+@keyframes fi-sidebar-slide-in {
+    from {
+        opacity: 0.9;
+        transform: translateX(-8px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes fi-page-fade-in {
+    from {
+        opacity: 0;
+        transform: translateY(6px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .fi-main-sidebar,
+    .fi-main-ctn,
+    .fi-topbar,
+    .fi-sidebar-close-overlay,
+    .fi-main-sidebar .fi-sidebar-item-btn,
+    .fi-page {
+        animation: none !important;
+        transition: none !important;
+    }
 }

@@ -115,6 +115,60 @@
     border-radius: 0.75rem;
 }
 
+/* ─── PHOTO UPLOAD FIELD ─── */
+.fi-fo-file-upload.ui-photo-upload .filepond--root {
+    border-radius: 1rem;
+    border: 1px dashed rgba(0, 0, 0, 0.18);
+    background:
+        radial-gradient(circle at top right, rgba(0, 0, 0, 0.035), transparent 55%),
+        #f8fafc;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.75);
+    transition: border-color 180ms ease, transform 180ms ease, background-color 180ms ease;
+}
+
+.fi-fo-file-upload.ui-photo-upload .filepond--root:hover {
+    border-color: rgba(0, 0, 0, 0.35);
+    transform: translateY(-1px);
+}
+
+.fi-fo-file-upload.ui-photo-upload .filepond--drop-label,
+.fi-fo-file-upload.ui-photo-upload .filepond--drop-label label {
+    min-height: 10.5rem;
+    padding: 1.75rem !important;
+    font-size: 0.9rem;
+    font-weight: 500;
+    line-height: 1.55;
+    color: #3f3f46 !important;
+}
+
+.fi-fo-file-upload.ui-photo-upload .filepond--label-action {
+    color: #18181b !important;
+    font-weight: 700;
+    text-decoration: underline;
+    text-underline-offset: 2px;
+}
+
+.dark .fi-fo-file-upload.ui-photo-upload .filepond--root {
+    border-color: rgba(255, 255, 255, 0.2);
+    background:
+        radial-gradient(circle at top right, rgba(255, 255, 255, 0.05), transparent 55%),
+        rgba(24, 24, 27, 0.88);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04);
+}
+
+.dark .fi-fo-file-upload.ui-photo-upload .filepond--root:hover {
+    border-color: rgba(255, 255, 255, 0.35);
+}
+
+.dark .fi-fo-file-upload.ui-photo-upload .filepond--drop-label,
+.dark .fi-fo-file-upload.ui-photo-upload .filepond--drop-label label {
+    color: #d4d4d8 !important;
+}
+
+.dark .fi-fo-file-upload.ui-photo-upload .filepond--label-action {
+    color: #f4f4f5 !important;
+}
+
 /* ─── FORM LABELS ─── */
 .fi-fo-field-wrp-label {
     font-weight: 600;
@@ -186,21 +240,35 @@
 }
 
 /* ─── WIDGETS / STATS ─── */
+.fi-wi-stats-overview {
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    padding: 0 !important;
+}
+
 .fi-wi-stats-overview-stat {
     border-radius: 1rem;
     border: 1px solid rgba(0, 0, 0, 0.07);
-    background: rgba(255, 255, 255, 0.9);
-    transition: all 200ms ease;
+    background: rgba(255, 255, 255, 0.95);
+    transition: all 250ms cubic-bezier(0.4, 0, 0.2, 1);
+    padding: 1.25rem;
 }
 
 .fi-wi-stats-overview-stat:hover {
-    box-shadow: 0 8px 24px -6px rgba(0, 0, 0, 0.08);
-    transform: translateY(-2px);
+    box-shadow: 0 12px 32px -8px rgba(0, 0, 0, 0.1);
+    transform: translateY(-3px);
+    border-color: rgba(0, 0, 0, 0.12);
 }
 
 .dark .fi-wi-stats-overview-stat {
     border-color: rgba(255, 255, 255, 0.08);
-    background: rgba(18, 18, 18, 0.85);
+    background: rgba(18, 18, 18, 0.9);
+}
+
+.dark .fi-wi-stats-overview-stat:hover {
+    border-color: rgba(255, 255, 255, 0.15);
+    box-shadow: 0 12px 32px -8px rgba(0, 0, 0, 0.4);
 }
 
 /* ─── MODAL ─── */
@@ -222,4 +290,74 @@
 /* ─── FORM GRID SPACING ─── */
 .fi-fo-component-ctn {
     gap: 1.25rem;
+}
+
+/* ─── PERFORMANCE + MOTION OVERRIDES ─── */
+.fi-topbar,
+.fi-sidebar {
+    backdrop-filter: blur(8px) saturate(1.02);
+}
+
+.fi-ta-ctn,
+.fi-section {
+    backdrop-filter: none;
+}
+
+.fi-main-sidebar,
+.fi-main-ctn,
+.fi-topbar,
+.fi-sidebar-close-overlay {
+    transition: all 220ms ease;
+}
+
+.fi-main-sidebar.fi-sidebar-open {
+    animation: fi-sidebar-slide-in 220ms ease-out;
+}
+
+.fi-page {
+    animation: fi-page-fade-in 220ms ease-out;
+}
+
+.fi-main-sidebar .fi-sidebar-item-btn {
+    transition: transform 160ms ease, background-color 160ms ease, color 160ms ease;
+}
+
+.fi-main-sidebar .fi-sidebar-item-btn:hover {
+    transform: translateX(3px);
+}
+
+@keyframes fi-sidebar-slide-in {
+    from {
+        opacity: 0.9;
+        transform: translateX(-8px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes fi-page-fade-in {
+    from {
+        opacity: 0;
+        transform: translateY(6px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .fi-main-sidebar,
+    .fi-main-ctn,
+    .fi-topbar,
+    .fi-sidebar-close-overlay,
+    .fi-main-sidebar .fi-sidebar-item-btn,
+    .fi-page {
+        animation: none !important;
+        transition: none !important;
+    }
 }
