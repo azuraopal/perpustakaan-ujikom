@@ -123,7 +123,10 @@ class UserResource extends Resource
     {
         return $table
             ->columns([
-                ImageColumn::make('foto')->circular(),
+                ImageColumn::make('foto')->circular()->disk('public')
+                    ->checkFileExistence(false)
+                    ->visibility('public')
+                    ->toggleable(),
                 TextColumn::make('nomor_induk')->label('NIS/NIP')->searchable()->sortable(),
                 TextColumn::make('nama_lengkap')->searchable()->sortable(),
                 TextColumn::make('email')->searchable(),
