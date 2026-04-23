@@ -69,6 +69,9 @@ class DatabaseSeeder extends Seeder
 
         // === PENGATURAN ===
         Pengaturan::create(['kunci' => 'denda_per_hari', 'nilai' => '1000', 'deskripsi' => 'Denda keterlambatan per hari (Rupiah)']);
+        Pengaturan::create(['kunci' => 'denda_rusak_ringan', 'nilai' => '5000', 'deskripsi' => 'Denda untuk buku rusak ringan']);
+        Pengaturan::create(['kunci' => 'denda_rusak_berat', 'nilai' => '15000', 'deskripsi' => 'Denda untuk buku rusak berat']);
+        Pengaturan::create(['kunci' => 'denda_hilang', 'nilai' => '50000', 'deskripsi' => 'Denda untuk buku hilang']);
         Pengaturan::create(['kunci' => 'max_peminjaman', 'nilai' => '3', 'deskripsi' => 'Maksimal buku dipinjam per siswa']);
         Pengaturan::create(['kunci' => 'durasi_pinjam', 'nilai' => '7', 'deskripsi' => 'Durasi peminjaman default (hari)']);
         Pengaturan::create(['kunci' => 'nama_perpustakaan', 'nilai' => 'Perpustakaan Sekolah Digital', 'deskripsi' => 'Nama perpustakaan']);
