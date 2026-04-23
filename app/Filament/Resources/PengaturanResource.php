@@ -7,7 +7,6 @@ use App\Models\Pengaturan;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Schemas\Schema;
-use Filament\Schemas\Components\Section;
 use Filament\Resources\Resource;
 use Filament\Actions\EditAction;
 use Filament\Tables\Columns\TextColumn;
@@ -23,28 +22,21 @@ class PengaturanResource extends Resource
     public static function form(Schema $schema): Schema
     {
         return $schema->schema([
-            Section::make('Pengaturan Sistem')
-                ->description('Simpan nilai konfigurasi inti yang dipakai sistem perpustakaan.')
-                ->icon('heroicon-o-cog-6-tooth')
-                ->compact()
-                ->schema([
-                    TextInput::make('kunci')
-                        ->required()
-                        ->placeholder('Contoh: denda_per_hari')
-                        ->prefixIcon('heroicon-o-key')
-                        ->helperText('Gunakan format snake_case agar mudah dikelola.')
-                        ->maxLength(100),
-                    TextInput::make('nilai')
-                        ->required()
-                        ->placeholder('Contoh: 1000')
-                        ->prefixIcon('heroicon-o-adjustments-horizontal')
-                        ->maxLength(255),
-                    Textarea::make('deskripsi')
-                        ->rows(3)
-                        ->placeholder('Jelaskan fungsi pengaturan ini secara singkat...')
-                        ->columnSpanFull(),
-                ])
-                ->columns(2),
+            TextInput::make('kunci')
+                ->required()
+                ->placeholder('Contoh: denda_per_hari')
+                ->prefixIcon('heroicon-o-key')
+                ->helperText('Gunakan format snake_case.')
+                ->maxLength(100),
+            TextInput::make('nilai')
+                ->required()
+                ->placeholder('Contoh: 1000')
+                ->prefixIcon('heroicon-o-adjustments-horizontal')
+                ->maxLength(255),
+            Textarea::make('deskripsi')
+                ->rows(3)
+                ->placeholder('Jelaskan fungsi pengaturan ini...')
+                ->columnSpanFull(),
         ]);
     }
 
@@ -52,8 +44,10 @@ class PengaturanResource extends Resource
     {
         return $table
             ->columns([
-                TextColumn::make('kunci')->searchable()->sortable(),
-                TextColumn::make('nilai')->searchable(),
+                TextColumn::make('kunci')->searchable()->sortable()
+                    ->badge()->color('gray'),
+                TextColumn::make('nilai')->searchable()
+                    ->copyable(),
                 TextColumn::make('deskripsi')->limit(50),
             ])
             ->actions([EditAction::make()])
@@ -63,9 +57,7 @@ class PengaturanResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListPengaturans::route('/'),
-            'create' => Pages\CreatePengaturan::route('/create'),
-            'edit' => Pages\EditPengaturan::route('/{record}/edit'),
+            'index' => Pages\ManagePengaturans::route('/'),
         ];
     }
 }

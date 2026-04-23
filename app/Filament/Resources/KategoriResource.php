@@ -7,7 +7,6 @@ use App\Models\Kategori;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Schemas\Schema;
-use Filament\Schemas\Components\Section;
 use Filament\Resources\Resource;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteAction;
@@ -28,25 +27,24 @@ class KategoriResource extends Resource
         return 'Master Data';
     }
 
+    public static function getNavigationBadge(): ?string
+    {
+        return (string) Kategori::count();
+    }
+
     public static function form(Schema $schema): Schema
     {
         return $schema->schema([
-            Section::make('Informasi Kategori')
-                ->description('Kelompokkan buku berdasarkan jenis untuk memudahkan pencarian.')
-                ->icon('heroicon-o-tag')
-                ->compact()
-                ->schema([
-                    TextInput::make('nama')
-                        ->required()
-                        ->placeholder('Contoh: Novel')
-                        ->prefixIcon('heroicon-o-tag')
-                        ->maxLength(100),
-                    Textarea::make('deskripsi')
-                        ->rows(3)
-                        ->placeholder('Deskripsi singkat kategori')
-                        ->columnSpanFull(),
-                ])
-                ->columns(2),
+            TextInput::make('nama')
+                ->required()
+                ->placeholder('Contoh: Novel')
+                ->prefixIcon('heroicon-o-tag')
+                ->maxLength(100)
+                ->columnSpanFull(),
+            Textarea::make('deskripsi')
+                ->rows(3)
+                ->placeholder('Deskripsi singkat kategori')
+                ->columnSpanFull(),
         ]);
     }
 
@@ -56,7 +54,9 @@ class KategoriResource extends Resource
             ->columns([
                 TextColumn::make('nama')->searchable()->sortable(),
                 TextColumn::make('deskripsi')->limit(50),
-                TextColumn::make('bukus_count')->counts('bukus')->label('Jumlah Buku'),
+                TextColumn::make('bukus_count')->counts('bukus')->label('Jumlah Buku')
+                    ->badge()
+                    ->color('info'),
             ])
             ->actions([EditAction::make(), DeleteAction::make()])
             ->bulkActions([BulkActionGroup::make([DeleteBulkAction::make()])]);
@@ -65,9 +65,7 @@ class KategoriResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListKategoris::route('/'),
-            'create' => Pages\CreateKategori::route('/create'),
-            'edit' => Pages\EditKategori::route('/{record}/edit'),
+            'index' => Pages\ManageKategoris::route('/'),
         ];
     }
 }

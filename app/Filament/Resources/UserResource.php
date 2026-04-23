@@ -32,6 +32,16 @@ class UserResource extends Resource
     protected static ?string $pluralModelLabel = 'Anggota';
     protected static ?int $navigationSort = 1;
 
+    public static function getNavigationBadge(): ?string
+    {
+        return (string) User::where('is_active', true)->count();
+    }
+
+    public static function getNavigationBadgeColor(): string|array|null
+    {
+        return 'success';
+    }
+
     public static function form(Schema $schema): Schema
     {
         return $schema->schema([
@@ -77,9 +87,9 @@ class UserResource extends Resource
                 ->columns(2),
 
             Section::make('Data Pribadi')
-                ->description('Informasi profil tambahan.')
+                ->description('Informasi profil dan foto anggota.')
                 ->icon('heroicon-o-user-circle')
-                ->columnSpanFull()
+                ->aside()
                 ->schema([
                     TextInput::make('kelas')
                         ->placeholder('Contoh: XII RPL 1')
@@ -89,19 +99,23 @@ class UserResource extends Resource
                         ->placeholder('08xxxxxxxxxx')
                         ->maxLength(20),
                     FileUpload::make('foto')
+                        ->label('Foto')
                         ->image()
-                        ->avatar()
+                        ->acceptedFileTypes(['image/jpeg', 'image/png'])
                         ->imageEditor()
-                        ->imagePreviewHeight('160')
-                        ->panelLayout('compact')
+                        ->imagePreviewHeight('220')
+                        ->panelLayout('integrated')
+                        ->placeholder('Tarik foto ke sini atau klik untuk pilih file')
+                        ->extraAttributes(['class' => 'ui-photo-upload'])
                         ->directory('foto-user')
-                        ->helperText('JPG/PNG maks 2MB.')
-                        ->maxSize(2048),
+                        ->helperText('Format JPG/PNG, ukuran maksimal 2MB.')
+                        ->maxSize(2048)
+                        ->columnSpanFull(),
                     Textarea::make('alamat')
                         ->rows(4)
-                        ->placeholder('Alamat lengkap anggota'),
-                ])
-                ->columns(2),
+                        ->placeholder('Alamat lengkap anggota')
+                        ->columnSpanFull(),
+                ]),
         ]);
     }
 

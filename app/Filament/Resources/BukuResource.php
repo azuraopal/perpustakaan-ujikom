@@ -32,6 +32,16 @@ class BukuResource extends Resource
         return 'Master Data';
     }
 
+    public static function getNavigationBadge(): ?string
+    {
+        return (string) Buku::count();
+    }
+
+    public static function getNavigationBadgeColor(): string|array|null
+    {
+        return 'info';
+    }
+
     public static function form(Schema $schema): Schema
     {
         return $schema->schema([
@@ -89,25 +99,28 @@ class BukuResource extends Resource
                 ])
                 ->columns(2),
 
-            Section::make('Detail Tambahan')
-                ->description('Cover dan sinopsis buku.')
+            Section::make('Cover & Sinopsis')
+                ->description('Tambahkan cover agar buku lebih menarik di katalog.')
                 ->icon('heroicon-o-photo')
-                ->columnSpanFull()
+                ->aside()
                 ->schema([
                     FileUpload::make('cover_image')
                         ->label('Cover Buku')
                         ->image()
                         ->imageEditor()
-                        ->imagePreviewHeight('180')
+                        ->imagePreviewHeight('220')
                         ->panelLayout('compact')
+                        ->disk('public')
+                        ->visibility('public')
                         ->directory('cover-buku')
                         ->helperText('Rasio potret, maks 2MB.')
-                        ->maxSize(2048),
+                        ->maxSize(2048)
+                        ->columnSpanFull(),
                     Textarea::make('sinopsis')
                         ->rows(5)
-                        ->placeholder('Ringkasan isi buku...'),
-                ])
-                ->columns(2),
+                        ->placeholder('Ringkasan isi buku...')
+                        ->columnSpanFull(),
+                ]),
         ]);
     }
 
@@ -115,12 +128,14 @@ class BukuResource extends Resource
     {
         return $table
             ->columns([
-                ImageColumn::make('cover_image')->label('Cover')->square()->size(50),
+                ImageColumn::make('cover_image')->label('Cover')->disk('public')->square()->size(50),
                 TextColumn::make('judul')->searchable()->sortable()->limit(40),
                 TextColumn::make('penulis')->searchable()->sortable(),
-                TextColumn::make('kategori.nama')->label('Kategori')->sortable(),
+                TextColumn::make('kategori.nama')->label('Kategori')->sortable()
+                    ->badge()->color('gray'),
                 TextColumn::make('tahun_terbit')->sortable(),
                 TextColumn::make('stok')->sortable()
+                    ->badge()
                     ->color(fn (int $state): string => $state > 0 ? 'success' : 'danger'),
                 TextColumn::make('rakBuku.nama')->label('Rak'),
             ])
