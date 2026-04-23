@@ -17,6 +17,8 @@ class PengaturanResource extends Resource
     protected static ?string $model = Pengaturan::class;
     protected static string | \BackedEnum | null $navigationIcon = 'heroicon-o-cog-6-tooth';
     protected static ?string $navigationLabel = 'Pengaturan';
+    protected static ?string $modelLabel = 'Pengaturan';
+    protected static ?string $pluralModelLabel = 'Pengaturan';
     protected static ?int $navigationSort = 10;
 
     public static function form(Schema $schema): Schema
@@ -45,7 +47,8 @@ class PengaturanResource extends Resource
         return $table
             ->columns([
                 TextColumn::make('kunci')->searchable()->sortable()
-                    ->badge()->color('gray'),
+                    ->badge()->color('gray')
+                    ->formatStateUsing(fn (string $state): string => ucwords(str_replace('_', ' ', $state))),
                 TextColumn::make('nilai')->searchable()
                     ->copyable(),
                 TextColumn::make('deskripsi')->limit(50),
