@@ -33,7 +33,7 @@ class PeminjamanSiswaResource extends Resource
 
     public static function getNavigationBadge(): ?string
     {
-        $userId = \Illuminate\Support\Facades\Auth::id();
+        $userId = Auth::id();
         if (! $userId) {
             return null;
         }
@@ -80,7 +80,7 @@ class PeminjamanSiswaResource extends Resource
                             ]];
                         })
                         ->minItems(1)
-                        ->maxItems($maxPinjam)
+                        ->maxItems($sisaKuota)
                         ->disabled($sisaKuota <= 0)
                         ->addActionLabel('+ Tambah Buku Lain')
                         ->reorderable(false)
@@ -104,7 +104,7 @@ class PeminjamanSiswaResource extends Resource
                                 ->numeric()
                                 ->default(1)
                                 ->minValue(1)
-                                ->maxValue(5)
+                                ->maxValue($sisaKuota)
                                 ->prefixIcon('heroicon-o-hashtag')
                                 ->required()
                                 ->columnSpanFull(),

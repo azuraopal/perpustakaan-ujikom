@@ -4,6 +4,7 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\PeminjamanResource\Pages;
 use App\Models\Denda;
+use App\Models\LogAktivitas;
 use App\Models\Peminjaman;
 use App\Models\Pengaturan;
 use Filament\Forms\Components\DatePicker;
@@ -15,9 +16,7 @@ use Filament\Schemas\Schema;
 use Filament\Schemas\Components\Section;
 use Filament\Resources\Resource;
 use Filament\Actions\Action;
-use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteAction;
-use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\SelectFilter;
@@ -214,7 +213,7 @@ class PeminjamanResource extends Resource
                             ->success()
                             ->sendToDatabase($record->user);
 
-                        \App\Models\LogAktivitas::create([
+                        LogAktivitas::create([
                             'user_id' => Auth::id(),
                             'aktivitas' => 'Persetujuan Peminjaman',
                             'detail' => "Menyetujui pinjaman {$record->kode_peminjaman} (Buku: {$record->buku->judul}).",
@@ -251,7 +250,7 @@ class PeminjamanResource extends Resource
                             ->danger()
                             ->sendToDatabase($record->user);
 
-                        \App\Models\LogAktivitas::create([
+                        LogAktivitas::create([
                             'user_id' => Auth::id(),
                             'aktivitas' => 'Penolakan Peminjaman',
                             'detail' => "Menolak pinjaman {$record->kode_peminjaman} dengan alasan: {$data['alasan_penolakan']}.",

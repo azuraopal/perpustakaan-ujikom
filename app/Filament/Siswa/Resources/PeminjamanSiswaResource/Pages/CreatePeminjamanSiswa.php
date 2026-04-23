@@ -72,15 +72,7 @@ class CreatePeminjamanSiswa extends CreateRecord
                 $errors["items.{$index}.jumlah"] = "Stok '{$buku->judul}' hanya tersedia {$buku->stok} eksemplar.";
             }
 
-            $sedangDipinjam = Peminjaman::query()
-                ->where('user_id', Auth::id())
-                ->where('buku_id', $item['buku_id'])
-                ->whereIn('status', Peminjaman::activeLoanStatuses())
-                ->exists();
 
-            if ($sedangDipinjam) {
-                $errors["items.{$index}.buku_id"] = "Anda masih meminjam buku '{$buku->judul}'. Kembalikan terlebih dahulu sebelum meminjam lagi.";
-            }
         }
 
         if ($errors !== []) {
