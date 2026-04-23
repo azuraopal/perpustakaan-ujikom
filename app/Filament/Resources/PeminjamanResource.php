@@ -29,6 +29,8 @@ class PeminjamanResource extends Resource
     protected static ?string $model = Peminjaman::class;
     protected static string | \BackedEnum | null $navigationIcon = 'heroicon-o-arrow-right-circle';
     protected static ?string $navigationLabel = 'Peminjaman';
+    protected static ?string $modelLabel = 'Peminjaman';
+    protected static ?string $pluralModelLabel = 'Peminjaman';
     protected static ?int $navigationSort = 5;
 
     public static function canCreate(): bool

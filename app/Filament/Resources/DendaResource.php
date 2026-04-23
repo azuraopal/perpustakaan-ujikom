@@ -25,6 +25,8 @@ class DendaResource extends Resource
     protected static ?string $model = Denda::class;
     protected static string | \BackedEnum | null $navigationIcon = 'heroicon-o-banknotes';
     protected static ?string $navigationLabel = 'Denda';
+    protected static ?string $modelLabel = 'Denda';
+    protected static ?string $pluralModelLabel = 'Denda';
     protected static ?int $navigationSort = 6;
 
     public static function canCreate(): bool

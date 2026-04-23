@@ -49,12 +49,31 @@ class MidtransCallbackController extends Controller
             ]);
 
             $kodePeminjaman = $denda->peminjaman->kode_peminjaman ?? '-';
+            $nominalFormatted = number_format($denda->nominal, 0, ',', '.');
 
+            // Notify siswa
             \Filament\Notifications\Notification::make()
-                ->title('Denda Berhasil Dilunasi')
-                ->body("Pembayaran denda untuk kode {$kodePeminjaman} telah dikonfirmasi secara otomatis.")
+                ->title('Denda Lunas')
+                ->body("Pembayaran denda Rp {$nominalFormatted} untuk kode {$kodePeminjaman} telah dikonfirmasi otomatis via Midtrans.")
                 ->success()
                 ->sendToDatabase($denda->user);
+
+            // Notify all admins
+            $admins = \App\Models\User::where('role', 'admin')->get();
+            if ($admins->isNotEmpty()) {
+                \Filament\Notifications\Notification::make()
+                    ->title('Pembayaran Denda Online')
+                    ->body("{$denda->user->nama_lengkap} melunasi denda Rp {$nominalFormatted} via Midtrans untuk kode {$kodePeminjaman}.")
+                    ->success()
+                    ->sendToDatabase($admins);
+            }
+
+            // Log activity
+            \App\Models\LogAktivitas::create([
+                'user_id' => $denda->user_id,
+                'aktivitas' => 'Pembayaran Denda Online (Webhook)',
+                'detail' => "Denda Rp {$nominalFormatted} untuk kode {$kodePeminjaman} dikonfirmasi otomatis oleh Midtrans.",
+            ]);
         }
 
         return response()->json(['message' => 'OK']);

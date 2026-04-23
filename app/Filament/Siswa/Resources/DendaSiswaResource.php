@@ -16,6 +16,7 @@ class DendaSiswaResource extends Resource
     protected static string | \BackedEnum | null $navigationIcon = 'heroicon-o-banknotes';
     protected static ?string $navigationLabel = 'Denda Saya';
     protected static ?string $modelLabel = 'Denda';
+    protected static ?string $pluralModelLabel = 'Denda';
     protected static ?int $navigationSort = 3;
     protected static ?string $slug = 'denda-saya';
 

@@ -3,6 +3,8 @@
 namespace App\Filament\Siswa\Pages;
 
 use App\Models\Denda;
+use App\Models\LogAktivitas;
+use App\Models\User;
 use App\Services\MidtransService;
 use Filament\Notifications\Notification;
 use Filament\Pages\Page;
@@ -71,9 +73,31 @@ class BayarDenda extends Page
 
         Notification::make()
             ->title('Pembayaran Berhasil!')
-            ->body('Denda telah dilunasi.')
+            ->body('Denda telah dilunasi via Midtrans.')
             ->success()
             ->send();
+
+        $kodePinjam = $denda->peminjaman->kode_peminjaman ?? '-';
+        Notification::make()
+            ->title('Denda Lunas')
+            ->body("Pembayaran denda Rp " . number_format($denda->nominal, 0, ',', '.') . " untuk kode {$kodePinjam} berhasil via Midtrans.")
+            ->success()
+            ->sendToDatabase(Auth::user());
+
+        $admins = User::where('role', 'admin')->get();
+        if ($admins->isNotEmpty()) {
+            Notification::make()
+                ->title('Pembayaran Denda Online')
+                ->body(Auth::user()->nama_lengkap . " melunasi denda Rp " . number_format($denda->nominal, 0, ',', '.') . " via Midtrans untuk kode {$kodePinjam}.")
+                ->success()
+                ->sendToDatabase($admins);
+        }
+
+        LogAktivitas::create([
+            'user_id' => Auth::id(),
+            'aktivitas' => 'Pembayaran Denda Online',
+            'detail' => "Siswa melunasi denda Rp " . number_format($denda->nominal, 0, ',', '.') . " via Midtrans untuk kode {$kodePinjam}.",
+        ]);
     }
 
     public function getClientKey(): string
