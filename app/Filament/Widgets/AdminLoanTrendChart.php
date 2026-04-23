@@ -13,7 +13,7 @@ class AdminLoanTrendChart extends ChartWidget
 
     protected ?string $heading = 'Tren Pengajuan vs Pengembalian (6 Bulan)';
 
-    protected ?string $maxHeight = '200px';
+    protected ?string $maxHeight = '300px';
 
     protected function getType(): string
     {
@@ -77,6 +77,7 @@ class AdminLoanTrendChart extends ChartWidget
     protected function getOptions(): ?array
     {
         return [
+            'maintainAspectRatio' => false,
             'plugins' => [
                 'legend' => [
                     'display' => true,

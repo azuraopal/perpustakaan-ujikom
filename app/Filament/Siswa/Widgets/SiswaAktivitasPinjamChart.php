@@ -15,7 +15,7 @@ class SiswaAktivitasPinjamChart extends ChartWidget
 
     protected ?string $heading = 'Aktivitas Pengajuan Anda (6 Bulan)';
 
-    protected ?string $maxHeight = '180px';
+    protected ?string $maxHeight = '300px';
 
     protected function getType(): string
     {
@@ -95,6 +95,7 @@ class SiswaAktivitasPinjamChart extends ChartWidget
     protected function getOptions(): ?array
     {
         return [
+            'maintainAspectRatio' => false,
             'plugins' => [
                 'legend' => [
                     'display' => true,
