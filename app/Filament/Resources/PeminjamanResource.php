@@ -334,7 +334,7 @@ class PeminjamanResource extends Resource
                 EditAction::make(),
                 DeleteAction::make(),
             ])
-            ->bulkActions([BulkActionGroup::make([DeleteBulkAction::make()])]);
+            ->bulkActions([]);
     }
 
     public static function getPages(): array

@@ -70,7 +70,7 @@ class RakBukuResource extends Resource
                     ->badge()->color('info'),
             ])
             ->actions([EditAction::make(), DeleteAction::make()])
-            ->bulkActions([BulkActionGroup::make([DeleteBulkAction::make()])]);
+            ->bulkActions([]);
     }
 
     public static function getPages(): array

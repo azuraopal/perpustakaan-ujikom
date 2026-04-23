@@ -149,7 +149,7 @@ class UserResource extends Resource
                 TernaryFilter::make('is_active')->label('Status Aktif'),
             ])
             ->actions([EditAction::make(), DeleteAction::make()])
-            ->bulkActions([BulkActionGroup::make([DeleteBulkAction::make()])]);
+            ->bulkActions([]);
     }
 
     public static function getPages(): array
