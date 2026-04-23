@@ -2,6 +2,9 @@
 
 namespace App\Providers\Filament;
 
+use App\Filament\Siswa\Widgets\SiswaAktivitasPinjamChart;
+use App\Filament\Siswa\Widgets\SiswaActivePeminjamanWidget;
+use App\Filament\Siswa\Widgets\SiswaRingkasanWidget;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\AuthenticateSession;
 use Filament\Http\Middleware\DisableBladeIconComponents;
@@ -10,7 +13,7 @@ use Filament\Pages\Dashboard;
 use Filament\Panel;
 use Filament\PanelProvider;
 use Filament\Support\Colors\Color;
-use Filament\Widgets\AccountWidget;
+
 use Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse;
 use Illuminate\Cookie\Middleware\EncryptCookies;
 use Illuminate\Foundation\Http\Middleware\PreventRequestForgery;
@@ -29,7 +32,9 @@ class SiswaPanelProvider extends PanelProvider
             ->font('Inter')
             ->viteTheme('resources/css/filament/siswa/theme.css')
             ->sidebarCollapsibleOnDesktop()
+            ->spa()
             ->maxContentWidth('full')
+            ->databaseNotifications()
             ->colors([
                 'primary' => Color::Gray,
                 'danger' => Color::Rose,
@@ -44,7 +49,9 @@ class SiswaPanelProvider extends PanelProvider
             ])
             ->discoverWidgets(in: app_path('Filament/Siswa/Widgets'), for: 'App\Filament\Siswa\Widgets')
             ->widgets([
-                AccountWidget::class,
+                \App\Filament\Siswa\Widgets\SiswaGreetingWidget::class,
+                SiswaRingkasanWidget::class,
+                SiswaActivePeminjamanWidget::class,
             ])
             ->middleware([
                 EncryptCookies::class,

@@ -2,6 +2,9 @@
 
 namespace App\Providers\Filament;
 
+use App\Filament\Widgets\AdminLoanTrendChart;
+use App\Filament\Widgets\AdminLatestPeminjamanWidget;
+use App\Filament\Widgets\AdminStatsOverview;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\AuthenticateSession;
 use Filament\Http\Middleware\DisableBladeIconComponents;
@@ -10,7 +13,7 @@ use Filament\Pages\Dashboard;
 use Filament\Panel;
 use Filament\PanelProvider;
 use Filament\Support\Colors\Color;
-use Filament\Widgets\AccountWidget;
+
 use Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse;
 use Illuminate\Cookie\Middleware\EncryptCookies;
 use Illuminate\Foundation\Http\Middleware\PreventRequestForgery;
@@ -31,7 +34,9 @@ class AdminPanelProvider extends PanelProvider
             ->viteTheme('resources/css/filament/admin/theme.css')
             ->sidebarCollapsibleOnDesktop()
             ->sidebarWidth('18rem')
+            ->spa()
             ->maxContentWidth('full')
+            ->databaseNotifications()
             ->colors([
                 'primary' => Color::Gray,
                 'danger' => Color::Rose,
@@ -46,7 +51,11 @@ class AdminPanelProvider extends PanelProvider
             ])
             ->discoverWidgets(in: app_path('Filament/Widgets'), for: 'App\Filament\Widgets')
             ->widgets([
-                AccountWidget::class,
+                \App\Filament\Widgets\AdminGreetingWidget::class,
+                AdminStatsOverview::class,
+                AdminLoanTrendChart::class,
+                AdminLatestPeminjamanWidget::class,
+                \App\Filament\Widgets\AdminLogAktivitasWidget::class,
             ])
             ->middleware([
                 EncryptCookies::class,
