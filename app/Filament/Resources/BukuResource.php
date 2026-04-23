@@ -111,7 +111,6 @@ class BukuResource extends Resource
                         ->image()
                         ->imageEditor()
                         ->imagePreviewHeight('220')
-                        ->panelLayout('compact')
                         ->disk('public')
                         ->visibility('public')
                         ->directory('cover-buku')
