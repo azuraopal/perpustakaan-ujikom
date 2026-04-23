@@ -35,6 +35,7 @@ class SiswaPanelProvider extends PanelProvider
             ->spa()
             ->maxContentWidth('full')
             ->databaseNotifications()
+            ->databaseNotificationsPolling('30s')
             ->colors([
                 'primary' => Color::Gray,
                 'danger' => Color::Rose,
