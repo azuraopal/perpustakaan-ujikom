@@ -34,8 +34,8 @@
         .nav-links a{text-decoration:none;color:var(--gray-3);font-weight:500;font-size:.9rem;transition:color .2s}
         .nav-links a:hover{color:var(--black)}
         .btn{display:inline-flex;align-items:center;gap:.5rem;padding:.6rem 1.4rem;border-radius:var(--radius-sm);font-weight:600;font-size:.875rem;text-decoration:none;transition:all .25s;cursor:pointer;border:1.5px solid var(--black)}
-        .btn-dark{background:var(--black);color:#fff;border-color:var(--black)}
-        .btn-dark:hover{background:var(--gray-2);transform:translateY(-2px);box-shadow:0 6px 20px rgba(0,0,0,.2)}
+        .btn-dark{background:var(--black);color:#fff !important;border-color:var(--black)}
+        .btn-dark:hover{background:var(--gray-2);color:#fff !important;transform:translateY(-2px);box-shadow:0 6px 20px rgba(0,0,0,.2)}
         .btn-light{background:transparent;color:var(--black)}
         .btn-light:hover{background:var(--black);color:#fff}
 

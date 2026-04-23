@@ -60,9 +60,9 @@
             width: 100%; padding: .85rem; background: #111; color: #fff;
             border: none; border-radius: .75rem; font-size: .9rem;
             font-weight: 700; font-family: inherit; cursor: pointer;
-            transition: all .2s; margin-top: .5rem;
+            transition: all .2s; margin-top: .5rem; letter-spacing: .01em;
         }
-        .btn-login:hover { background: #333; transform: translateY(-1px); box-shadow: 0 4px 16px rgba(0,0,0,.15); }
+        .btn-login:hover { background: #333; color: #fff; transform: translateY(-1px); box-shadow: 0 4px 16px rgba(0,0,0,.15); }
 
         .error-box {
             background: #fef2f2; border: 1px solid #fecaca; border-radius: .75rem;
